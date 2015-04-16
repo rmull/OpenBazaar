@@ -94,7 +94,7 @@ class PeerConnection(GUIDMixin, object):
 
                 self.pinging = False
 
-            ioloop.IOLoop.instance().call_later(2, no_response)
+            ioloop.IOLoop.instance().call_later(5, no_response)
 
         self.seed = False
         self.punching = False
