@@ -95,6 +95,10 @@ class DHT(object):
 
         for peer in self.active_peers:
             self.log.debug('Peer: %s', peer)
+
+            peer._rudp_connection._sender._packet_sender.hostname = hostname
+            peer._rudp_connection._sender._packet_sender.port = port
+
             if peer.guid == guid:
 
                 # Check if hostname/port combo changed
@@ -190,20 +194,13 @@ class DHT(object):
         key = msg['key']
         find_id = msg['findID']
         pubkey = msg['pubkey']
-        nickname = msg['senderNick']
-        nat_type = msg['nat_type']
-        hostname = msg['hostname']
-        avatar_url = msg['avatar_url']
-        port = msg['port']
 
         assert guid is not None and guid != self.transport.guid
         assert key is not None
         assert find_id is not None
         assert pubkey is not None
 
-        querying_peer = self.add_peer(
-            hostname, port, pubkey, guid, nickname, nat_type, avatar_url
-        )
+        querying_peer = self.routing_table.get_contact(guid)
 
         if querying_peer is not None:
 
