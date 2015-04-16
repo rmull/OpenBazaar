@@ -273,6 +273,7 @@ class CryptoTransportLayer(TransportLayer):
                 if peer:
                     peer.reachable = True
                     peer.relaying = False
+                    peer._rudp_connection._sender._packet_sender.relaying = False
                 else:
                     self.log.debug('Do not know about this peer yet.')
                 return
