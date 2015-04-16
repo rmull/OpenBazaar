@@ -961,14 +961,11 @@ class CryptoTransportLayer(TransportLayer):
         # here goes the application callbacks
         # we get a "clean" msg which is a dict holding whatever
         hostname = msg.get('hostname')
-        port = msg.get('port')
-        pubkey = msg.get('pubkey')
         guid = msg.get('senderGUID')
         nickname = msg.get('senderNick', '')
         nickname = nickname[:120] if nickname else ''
         msg_type = msg.get('type')
         namecoin = msg.get('senderNamecoin', '')
-        avatar_url = msg.get('avatar_url')
 
         # Checking for malformed URIs
         # if not network_util.is_valid_uri(uri):
