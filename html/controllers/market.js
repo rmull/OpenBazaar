@@ -48,7 +48,7 @@ angular.module('app')
                 Connection.$on('peer', function(e, msg){ $scope.add_peer(msg); });
                 Connection.$on('goodbye', function(e, msg){ $scope.goodbye(msg); });
                 Connection.$on('hello_response', function(e, msg){ $scope.hello_response(msg); });
-                listeners.peers = [];
+
                 Connection.$on('peers', function(e, msg){ $scope.update_peers(msg); });
                 Connection.$on('peer_remove', function(e, msg){ $scope.remove_peer(msg); });
                 if(!listeners.hasOwnProperty('inbox_count')) {
@@ -90,7 +90,7 @@ angular.module('app')
                 Connection.send('peers', {});
             };
 
-            $interval(refresh_peers, 30000, 0, true);
+            $interval(refresh_peers, 5000, 0, true);
 
             /**
              * Create a shout and send it to all connected peers
@@ -330,6 +330,13 @@ angular.module('app')
 
             $scope.update_peers = function(msg) {
                 console.log('Refresh peers: ', msg);
+                for(var i = 0; i < msg.peers.length; i++) {
+                    var obj = msg.peers[i];
+
+                    if(msg.peers.indexOf(obj.guid.substr(0,4) == "seed") !== -1) {
+                        msg.peers.splice(i, 1);
+                    }
+                }
                 $scope.peers = msg.peers;
             };
 
