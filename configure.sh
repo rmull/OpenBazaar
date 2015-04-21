@@ -164,6 +164,19 @@ function installArch {
   ./env/bin/pip install -r requirements.txt
 }
 
+function installUnknown {
+  echo "Unsupported package manager. Would you like to attempt setup anyway?"
+
+  if confirm; then
+
+      make_env
+
+      ./env/bin/pip install -r requirements.txt
+  else
+      exit 1
+  fi
+}
+
 function confirm {
     # call with a prompt string or use a default Y
     read -r -p "Are you sure? [Y/n] " response
@@ -280,11 +293,11 @@ elif [[ $OSTYPE == linux-gnu || $OSTYPE == linux-gnueabihf ]]; then
     installFedora
   elif [ -f /etc/slackware-version ]; then
     installSlack
-  elif grep Raspbian /etc/os-release ; then
+  elif grep -qs Raspbian /etc/os-release ; then
     echo Found Raspberry Pi Raspbian
     installRaspbian "$@"
   else
-    installUbuntu
+    installUnknown
   fi
   doneMessage
 fi
